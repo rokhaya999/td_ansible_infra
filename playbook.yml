@@ -1,0 +1,26 @@
+- name: Acte 1 - essai serv_web
+  hosts: serv_web
+  become: yes
+  gather_facts: false
+  tasks:
+    - name: Mise à jour du cache apt
+      apt:
+        update_cache: yes
+
+    - name: Installation du paquet apache2
+      apt:
+        name: apache2
+        state: present
+
+    - name: Copie du répertoire site_web dans /var/www/html/
+      copy:
+        src: files/site_web/
+        dest: /var/www/html/
+        owner: www-data
+        mode: "0600"
+
+    - name: Redémarrage du service apache
+      service:
+        name: apache2
+        enabled: yes
+        state: restarted
