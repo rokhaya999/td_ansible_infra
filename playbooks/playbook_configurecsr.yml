@@ -82,4 +82,13 @@
         lines:
           - "access-list 1 permit 192.168.0.0  0.0.255.255"
           - "ip nat inside source list 1 interface GigabitEthernet1 overload"
+
   
+    - name: Configuration NAT statique
+      cisco.ios.ios_config:
+        lines:
+          - "ip nat inside source static tcp 192.168.3.2 80 interface GigabitEthernet1 80"
+          - "ip nat inside source static tcp 192.168.4.2 22 interface GigabitEthernet1 2222"
+        parents:
+          - "interface GigabitEthernet1"
+        
