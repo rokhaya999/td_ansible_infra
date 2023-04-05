@@ -57,3 +57,29 @@
           - "default-router 192.168.2.1"
           - "dns-server 10.250.250.12"
 
+    
+    - name: Configuration NAT outside
+      cisco.ios.ios_config:
+        lines:
+          - "interface GigabitEthernet1"
+          - "ip nat outside"
+        parents: "interface GigabitEthernet1"
+
+    - name: Configuration NAT inside
+      cisco.ios.ios_config:
+        lines:
+          - "interface {{ item }}"
+          - "ip nat inside"
+        parents: "interface {{ item }}"
+   
+      loop:
+        - "GigabitEthernet2"
+        - "GigabitEthernet3"
+        - "GigabitEthernet4"
+
+    - name: Configuration ACL pour NAT dynamique
+      cisco.ios.ios_config:
+        lines:
+          - "access-list 1 permit 192.168.0.0  0.0.255.255"
+          - "ip nat inside source list 1 interface GigabitEthernet1 overload"
+  
